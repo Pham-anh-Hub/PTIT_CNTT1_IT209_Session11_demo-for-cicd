@@ -1,0 +1,63 @@
+### 1. Lấy danh sách tất cả sản phẩm
+GET http://localhost:8080/api/products
+Accept: application/json
+
+### 2. Tìm kiếm sản phẩm theo từ khóa (keyword)
+GET http://localhost:8080/api/products?keyword=Laptop
+Accept: application/json
+
+### 3. Lấy chi tiết sản phẩm theo ID
+GET http://localhost:8080/api/products/1
+Accept: application/json
+
+### 4. Thêm mới sản phẩm 1
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "name": "Laptop Dell XPS 15",
+  "description": "Intel Core i7, 16GB RAM, 512GB SSD",
+  "price": 28500000.00,
+  "quantity": 15,
+  "active": true
+}
+
+### 5. Thêm mới sản phẩm 2
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "name": "Chuột không dây Logitech MX Master 3S",
+  "description": "Cảm biến 8000 DPI, kết nối Bluetooth",
+  "price": 2490000.00,
+  "quantity": 50,
+  "active": true
+}
+
+### 6. Cập nhật thông tin sản phẩm (ID = 1)
+PUT http://localhost:8080/api/products/1
+Content-Type: application/json
+
+{
+  "name": "Laptop Dell XPS 15 (2024)",
+  "description": "Intel Core i7 Gen 13, 32GB RAM, 1TB SSD",
+  "price": 32000000.00,
+  "quantity": 10,
+  "active": true
+}
+
+### 7. Test kiểm tra validation lỗi (Giá âm, Tên trống)
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "name": "",
+  "description": "Test validation lỗi",
+  "price": -100,
+  "quantity": -5,
+  "active": true
+}
+
+### 8. Xóa sản phẩm theo ID (ID = 2)
+DELETE http://localhost:8080/api/products/2
+Accept: application/json
