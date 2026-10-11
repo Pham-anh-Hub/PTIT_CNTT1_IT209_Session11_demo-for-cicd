@@ -126,7 +126,7 @@ class ProductControllerTest {
     @Test
     @DisplayName("DELETE /api/products/1 - Xóa sản phẩm thành công trả về 200")
     void testDeleteProduct_Success() throws Exception {
-        doNothing().when(productService).delete(1L);
+        doNothing().when(productService).deleteProduct(1L);
 
         mockMvc.perform(delete("/api/products/1"))
                 .andExpect(status().isOk())
