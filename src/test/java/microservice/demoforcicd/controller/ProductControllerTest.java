@@ -1,6 +1,5 @@
 package microservice.demoforcicd.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import microservice.demoforcicd.dto.ProductRequest;
 import microservice.demoforcicd.entity.Product;
 import microservice.demoforcicd.exception.GlobalExceptionHandler;
@@ -31,7 +30,13 @@ class ProductControllerTest {
 
     private MockMvc mockMvc;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private static final String SAMPLE_REQUEST_JSON = "{"
+            + "\"name\":\"Bàn phím cơ AKKO\","
+            + "\"description\":\"Switch switch blue\","
+            + "\"price\":1200000.00,"
+            + "\"quantity\":20,"
+            + "\"active\":true"
+            + "}";
 
     @Mock
     private ProductService productService;
@@ -40,7 +45,6 @@ class ProductControllerTest {
     private ProductController productController;
 
     private Product sampleProduct;
-    private ProductRequest sampleRequest;
 
     @BeforeEach
     void setUp() {
@@ -50,14 +54,6 @@ class ProductControllerTest {
 
         sampleProduct = Product.builder()
                 .id(1L)
-                .name("Bàn phím cơ AKKO")
-                .description("Switch switch blue")
-                .price(new BigDecimal("1200000.00"))
-                .quantity(20)
-                .active(true)
-                .build();
-
-        sampleRequest = ProductRequest.builder()
                 .name("Bàn phím cơ AKKO")
                 .description("Switch switch blue")
                 .price(new BigDecimal("1200000.00"))
@@ -108,7 +104,7 @@ class ProductControllerTest {
 
         mockMvc.perform(post("/api/products")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(sampleRequest)))
+                        .content(SAMPLE_REQUEST_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.data.name").value("Bàn phím cơ AKKO"));
@@ -121,7 +117,7 @@ class ProductControllerTest {
 
         mockMvc.perform(put("/api/products/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(sampleRequest)))
+                        .content(SAMPLE_REQUEST_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.data.id").value(1));
