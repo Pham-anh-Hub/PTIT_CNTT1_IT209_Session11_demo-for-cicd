@@ -67,11 +67,31 @@ jobs:
       - name: Thực thi câu lệnh triển khai trên VPS qua SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
-            host: ${{ secrets.SSH_HOST }}
-            username: ${{ secrets.SSH_USER }}
-            key: ${{ secrets.SSH_KEY }}
-            script: |
-              docker pull ghcr.io/${{ github.actor }}/my-app:latest
-              docker stop my-app || true
-              docker rm my-app || true
-              docker run -d --name my-app -p 8080:8080 ghcr.io/${{ github.actor }}/my-app:latest
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            echo "============================================="
+            echo "BẮT ĐẦU QUY TRÌNH TRIỂN KHAI TRÊN VPS"
+            echo "============================================="
+            
+            IMAGE_NAME=$(echo "ghcr.io/${{ github.repository }}:latest" | tr '[:upper:]' '[:lower:]')
+            
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            
+            echo " Đang kéo Image: $IMAGE_NAME..."
+            docker pull $IMAGE_NAME
+            
+            echo "🔄 Dọn dẹp container cũ..."
+            docker stop app || true
+            docker rm app || true
+            
+            echo " Khởi chạy container mới trên cổng 8080..."
+            docker run -d \
+              --name app \
+              -p 8080:8080 \
+              --restart unless-stopped \
+              $IMAGE_NAME
+            
+            echo " TRIỂN KHAI LÊN VPS HOÀN TẤT THÀNH CÔNG!"
+            docker ps --filter "name=app"
