@@ -82,7 +82,7 @@ jobs:
             echo " Đang kéo Image: $IMAGE_NAME..."
             docker pull $IMAGE_NAME
             
-            echo "🔄 Dọn dẹp container cũ..."
+            echo " Dọn dẹp container cũ..."
             docker stop app || true
             docker rm app || true
             
